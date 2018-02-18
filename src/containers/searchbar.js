@@ -21,7 +21,7 @@ class SearchBar extends Component {
 
     render() {
         return (
-            <form className="input-group" onSubmit={this.onFormSubmit.bind(this)}>
+            <form className="searchbar input-group" onSubmit={this.onFormSubmit.bind(this)}>
                 <input
                     placeholder="Enter city..."
                     className="form-control"

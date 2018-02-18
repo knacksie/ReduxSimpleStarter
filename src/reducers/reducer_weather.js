@@ -5,7 +5,13 @@ export default function (state = [], action) {
 
     switch (action.type) {
         case FETCH_WEATHER:
-            return [action.payload.data, ...state];
+            if (action.payload.status == 200) {
+                return [action.payload.data, ...state];
+            } else {
+                console.log("Error getting city", action);
+                return state;
+            }
+
     }
 
     return state;

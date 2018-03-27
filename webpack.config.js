@@ -2,6 +2,7 @@ module.exports = {
   entry: [
     './src/index.js'
   ],
+  devtool: 'inline-source-map',
   output: {
     path: __dirname,
     publicPath: '/',
@@ -21,6 +22,6 @@ module.exports = {
   },
   devServer: {
     historyApiFallback: true,
-    contentBase: './'
+    contentBase: './',
   }
 };

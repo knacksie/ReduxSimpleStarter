@@ -1,36 +1,46 @@
 // import _ from 'lodash'
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-// import { fetchPosts } from '../actions'
+import { Field, reduxForm } from 'redux-form'
 
 class PostsNew extends Component {
-//     componentDidMount() {
-//         this.props.fetchPosts();
-//     }
+    renderField(props) {
+        return (
+            <div className='form-group'>
+                <label className=''>{props.label}</label>
+                <input type='text' className='form-control' {...props.input} />
+                <span>{props.meta.error}</span>
+            </div>
+        );
+    }
 
-//     renderPosts() {
-//         return _.map(this.props.posts, post => {
-//             return (
-//                 <li className='list-group-item' key={post.id}>
-//                     {post.title}
-//                 </li>
-//             );
-//         });
-//     }
+    onSubmit(values) {
+        console.log("Submit: " + values.title);
+    }
 
     render() {
         return (
-            <div>
+            <form onSubmit={this.props.handleSubmit((values) => this.onSubmit(values))}>
                 <h2>Send Post</h2>
-
-            </div>
+                <Field label='Title' name='title' component={this.renderField} />
+                <Field label='Categories' name='categories' component={this.renderField} />
+                <Field label='Post content' name='content' component={this.renderField} />
+                <input type='submit' />
+            </form>
         );
     }
 }
 
-// function mapStateToProps(state) {
-//     return { posts: state.posts };
-// }
+function validate(values) {
+    let errors = {};
 
-// export default connect(mapStateToProps, { fetchPosts })(PostsIndex);
-export default PostsNew;
+    if (!values.title) {
+        errors.title = "Title required!";
+    }
+    return errors;
+}
+
+export default reduxForm({
+    validate: validate,
+    form: 'formPostsNew'
+})(PostsNew);

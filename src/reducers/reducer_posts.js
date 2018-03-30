@@ -2,7 +2,7 @@ import _ from 'lodash';
 import { FETCH_POSTS } from '../actions';
 
 export default function(state = {}, action) {
-    console.log("posts reducer called");
+    console.log("posts reducer called with type " + action.type);
 
     switch (action.type) {
        

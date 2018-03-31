@@ -2,20 +2,27 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { Field, reduxForm } from 'redux-form'
+import { Link } from 'react-router-dom'
+import { createPost } from '../actions'
 
 class PostsNew extends Component {
     renderField(props) {
+        const { touched, invalid, error } = props.meta;
+
         return (
-            <div className='form-group'>
+            <div className={`form-group ${(touched && invalid ? 'has-danger' : '' )}`}>
                 <label className=''>{props.label}</label>
                 <input type='text' className='form-control' {...props.input} />
-                <span>{props.meta.error}</span>
+                <div className='text-help'>{(touched && invalid ? error : '')}</div>
             </div>
         );
     }
 
     onSubmit(values) {
-        console.log("Submit: " + values.title);
+        this.props.createPost(values, () => {
+            this.props.history.push('/');
+        });
+   
     }
 
     render() {
@@ -25,7 +32,8 @@ class PostsNew extends Component {
                 <Field label='Title' name='title' component={this.renderField} />
                 <Field label='Categories' name='categories' component={this.renderField} />
                 <Field label='Post content' name='content' component={this.renderField} />
-                <input type='submit' />
+                <input type='submit' className='btn btn-primary' />
+                <Link className='btn btn-secondary' to='/'>Cancel</Link>
             </form>
         );
     }
@@ -37,10 +45,24 @@ function validate(values) {
     if (!values.title) {
         errors.title = "Title required!";
     }
+
+    if (values.title && values.title.length < 3) {
+        errors.title = "Title has to be at least 3 characters long.";
+    }
+    
+    if (!values.categories) {
+        errors.categories = "Category required!";
+    }
+    
+    if (!values.content) {
+        errors.content = "Content required!";
+    }
     return errors;
 }
 
 export default reduxForm({
     validate: validate,
     form: 'formPostsNew'
-})(PostsNew);
+})(
+    connect(null, { createPost })(PostsNew)
+);
